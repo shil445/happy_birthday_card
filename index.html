@@ -1,0 +1,65 @@
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+
+export default function InteractiveBirthdayCard() {
+  const [answer, setAnswer] = useState("");
+  const [unlocked, setUnlocked] = useState(false);
+  const [error, setError] = useState("");
+
+  const correctAnswer = "love";
+
+  const handleSubmit = () => {
+    if (answer.trim().toLowerCase() === correctAnswer) {
+      setUnlocked(true);
+      setError("");
+    } else {
+      setError("Oops! That's not quite right. Try again.");
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-100 to-purple-200 p-4">
+      <Card className="max-w-md w-full text-center shadow-xl rounded-2xl p-6">
+        {!unlocked ? (
+          <CardContent>
+            <motion.h1 
+              className="text-2xl font-bold mb-4" 
+              initial={{ opacity: 0, y: -20 }} 
+              animate={{ opacity: 1, y: 0 }}>
+              🎉 Solve the Riddle to Unlock Your Birthday Surprise!
+            </motion.h1>
+            <p className="mb-6">
+              I come in many forms, yet hold no shape,<br />
+              I’m something you can give or take.<br />
+              I’m often shared with words and tone,<br />
+              And when I’m true, you’re not alone.<br /><br />
+              <em>What am I?</em>
+            </p>
+            <Input 
+              placeholder="Enter your answer..."
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              className="mb-4" 
+            />
+            {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+            <Button onClick={handleSubmit} className="w-full">Submit</Button>
+          </CardContent>
+        ) : (
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <h2 className="text-3xl font-bold text-green-600 mb-4">🎁 Unlocked!</h2>
+            <p className="mb-2">Correct! The answer is <strong>LOVE</strong>.</p>
+            <p>Your gift: <a href="https://www.amazon.com/gift-card" target="_blank" className="text-blue-600 underline">$25 Amazon Gift Card</a></p>
+            <p className="text-sm text-gray-500 mt-4">Enjoy your special day 💖</p>
+          </motion.div>
+        )}
+      </Card>
+    </div>
+  );
+}
